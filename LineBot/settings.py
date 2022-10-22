@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +20,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+LINE_CHANNEL_ACCESS_TOKEN = 'KkQ7I9miG3pzCxo5oHmQCdsYhvGz3yaEuIdPAvFD6HjZ1W2u9KDnR12KfTdGV3Xtunl5TbJWl7BXAYzYsDBDjIC1/U0BtY/T1GqY39eMdsvQ2oquJ1mYYcwlm3XCY6HWzrpgA1PPbhlK5K/7Q5YCbQdB04t89/1O/w1cDnyilFU='
+LINE_CHANNEL_SECRET = 'e91062f9fce912814cc076262bda975f'
 SECRET_KEY = 'django-insecure-op$xa-4((fa7n%g9j(q9w+$36p@8(rjy8yi-@(y2s*f_pdi71k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'linebotapp'
 ]
 
 MIDDLEWARE = [
@@ -54,8 +57,7 @@ ROOT_URLCONF = 'LineBot.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [os.path.join(BASE_DIR,'templates')],# add templates path
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,8 +80,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',#PostgreSQL
         'NAME': 'Crawler',  # database name
-        'USER': 'DeepseaBus@1992',  # database user
-        'PASSWORD': '****',  # password
+        'USER': 'postgres',  # database user
+        'PASSWORD': 'DeepseaBus@1992',  # password
         'HOST': 'localhost',  # Server location
         'PORT': '5432'  # port
     }
@@ -108,9 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hant'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Taipei'
 
 USE_I18N = True
 
@@ -123,6 +125,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICILES_DIRS = [
+    os.path.join(BASE_DIR,'static')# add static path
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

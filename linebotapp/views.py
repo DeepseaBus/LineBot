@@ -63,31 +63,31 @@ def callback(request):
                     message.append(TextSendMessage(text='檔案訊息'))
                     line_bot_api.reply_message(event.reply_token, message)
 
-                elif isinstance(event, FollowEvent):
-                    print('加入好友')
-                    line_bot_api.reply_message(event.reply_token, message)
+            elif isinstance(event, FollowEvent):
+                print('加入好友')
+                line_bot_api.reply_message(event.reply_token, message)
 
-                elif isinstance(event, UnfollowEvent):
-                    print('取消好友')
+            elif isinstance(event, UnfollowEvent):
+                print('取消好友')
 
-                elif isinstance(event, JoinEvent):
-                    print('進入群組')
-                    line_bot_api.reply_message(event.reply_token, message)
+            elif isinstance(event, JoinEvent):
+                print('進入群組')
+                line_bot_api.reply_message(event.reply_token, message)
 
-                elif isinstance(event, LeaveEvent):
-                    print('離開群組')
-                    line_bot_api.reply_message(event.reply_token, message)
+            elif isinstance(event, LeaveEvent):
+                print('離開群組')
+                line_bot_api.reply_message(event.reply_token, message)
 
-                elif isinstance(event, MemberJoinedEvent):
-                    print('有人入群')
-                    line_bot_api.reply_message(event.reply_token, message)
+            elif isinstance(event, MemberJoinedEvent):
+                print('有人入群')
+                line_bot_api.reply_message(event.reply_token, message)
 
-                elif isinstance(event, MemberLeftEvent):
-                    print('有人退群')
-                    line_bot_api.reply_message(event.reply_token, message)
+            elif isinstance(event, MemberLeftEvent):
+                print('有人退群')
+                line_bot_api.reply_message(event.reply_token, message)
 
-                elif isinstance(event, PostbackEvent):
-                    print('PostbackEvent')
+            elif isinstance(event, PostbackEvent):
+                print('PostbackEvent')
             # if isinstance(event, MessageEvent):
             #     mtext = event.message.text
             #     uid = event.source.user_id

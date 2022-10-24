@@ -24,7 +24,31 @@ def callback(request):
         body = request.body.decode('utf-8')
         # put request.body in return message for debug
         message.append(TextSendMessage(text=str(body)))
-
+        message = TextSendMessage(
+            text="文字訊息",
+            quick_reply=QuickReply(
+                items=[
+                    QuickReplyButton(
+                        action=PostbackAction(label="Postback", data="回傳資料")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="文字訊息", text="回傳文字")
+                    ),
+                    QuickReplyButton(
+                        action=DatetimePickerAction(label="時間選擇", data="時間選擇", mode='datetime')
+                    ),
+                    QuickReplyButton(
+                        action=CameraAction(label="拍照")
+                    ),
+                    QuickReplyButton(
+                        action=CameraRollAction(label="相簿")
+                    ),
+                    QuickReplyButton(
+                        action=LocationAction(label="傳送位置")
+                    )
+                ]
+            )
+        )
         try:
             events = parser.parse(body, signature)
         except InvalidSignatureError:
@@ -36,7 +60,7 @@ def callback(request):
             if isinstance(event, MessageEvent):
                 print(event.message.type)
                 if event.message.type == 'text':
-                    message.append(TextSendMessage(text='文字訊息'))
+                    # message.append(TextSendMessage(text='文字訊息'))
                     line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'image':

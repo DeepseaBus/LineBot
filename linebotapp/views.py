@@ -10,7 +10,7 @@ from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import *
 
 from linebotapp.models import *
-
+from linebotapp.Flex_Msg import flex_message_example
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
@@ -24,31 +24,32 @@ def callback(request):
         body = request.body.decode('utf-8')
         # put request.body in return message for debug
         message.append(TextSendMessage(text=str(body)))
-        message = TextSendMessage(
-            text="文字訊息",
-            quick_reply=QuickReply(
-                items=[
-                    QuickReplyButton(
-                        action=PostbackAction(label="Postback", data="回傳資料")
-                    ),
-                    QuickReplyButton(
-                        action=MessageAction(label="文字訊息", text="回傳文字")
-                    ),
-                    QuickReplyButton(
-                        action=DatetimePickerAction(label="時間選擇", data="時間選擇", mode='datetime')
-                    ),
-                    QuickReplyButton(
-                        action=CameraAction(label="拍照")
-                    ),
-                    QuickReplyButton(
-                        action=CameraRollAction(label="相簿")
-                    ),
-                    QuickReplyButton(
-                        action=LocationAction(label="傳送位置")
-                    )
-                ]
-            )
-        )
+        # quick_reply
+        # message = TextSendMessage(
+        #     text="文字訊息",
+        #     quick_reply=QuickReply(
+        #         items=[
+        #             QuickReplyButton(
+        #                 action=PostbackAction(label="Postback", data="回傳資料")
+        #             ),
+        #             QuickReplyButton(
+        #                 action=MessageAction(label="文字訊息", text="回傳文字")
+        #             ),
+        #             QuickReplyButton(
+        #                 action=DatetimePickerAction(label="時間選擇", data="時間選擇", mode='datetime')
+        #             ),
+        #             QuickReplyButton(
+        #                 action=CameraAction(label="拍照")
+        #             ),
+        #             QuickReplyButton(
+        #                 action=CameraRollAction(label="相簿")
+        #             ),
+        #             QuickReplyButton(
+        #                 action=LocationAction(label="傳送位置")
+        #             )
+        #         ]
+        #     )
+        # )
         try:
             events = parser.parse(body, signature)
         except InvalidSignatureError:
@@ -61,7 +62,13 @@ def callback(request):
                 print(event.message.type)
                 if event.message.type == 'text':
                     # message.append(TextSendMessage(text='文字訊息'))
-                    line_bot_api.reply_message(event.reply_token, message)
+                    mtext = event.message.text
+                    if 'FlexMessage測試' in mtext:
+                        message.append(flex_message_example())
+                        line_bot_api.reply_message(event.reply_token, message)
+                    else:
+                        message.append(TextSendMessage(text='文字訊息'))
+                        line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'image':
                     message.append(TextSendMessage(text='圖片訊息'))

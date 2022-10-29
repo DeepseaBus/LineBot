@@ -110,13 +110,12 @@ def callback(request):
                             fd.write((chunk))
                     # save image as gray and binary
                     domain = 'cb39-2001-b011-3819-d55a-98da-338d-1db2-20ef.jp.ngrok.io'
-                    # gray, binary = image_processing_1(image_name, path)
-                    # gray = 'https://' + domain + gray[1:]
-                    # binary = 'https://' + domain + binary[1:]
-                    # message.append(ImageSendMessage(original_content_url=gray, preview_image_url=gray))
-                    # message.append(ImageSendMessage(original_content_url=binary, preview_image_url=binary))
-                    contour = image_processing_1(image_name, path)
+                    gray, binary, contour = image_processing_1(image_name, path)
+                    gray = 'https://' + domain + gray[1:]
+                    binary = 'https://' + domain + binary[1:]
                     contour = 'https://' + domain + contour[1:]
+                    message.append(ImageSendMessage(original_content_url=gray, preview_image_url=gray))
+                    message.append(ImageSendMessage(original_content_url=binary, preview_image_url=binary))
                     message.append(ImageSendMessage(original_content_url=contour, preview_image_url=contour))
                     line_bot_api.reply_message(event.reply_token, message)
 

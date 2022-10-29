@@ -11,6 +11,14 @@ from linebot.models import *
 
 from linebotapp.models import *
 from linebotapp.Flex_Msg import *
+from linebotapp.image_processing import *
+
+import os
+import string
+import time
+import random
+import csv
+
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
@@ -19,7 +27,7 @@ parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 def callback(request):
     if request.method == 'POST':
         # empty list for return message
-        # message = []
+        message = []
         signature = request.META['HTTP_X_LINE_SIGNATURE']
         body = request.body.decode('utf-8')
         # put request.body in return message for debug
@@ -63,7 +71,6 @@ def callback(request):
                 print(event.message.type)
                 if event.message.type == 'text':
                     # message.append(TextSendMessage(text='文字訊息'))
-                    message = []
                     uid = event.source.user_id
                     profile = line_bot_api.get_profile(uid)
                     name = profile.display_name
@@ -91,7 +98,23 @@ def callback(request):
                         line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'image':
-                    message.append(TextSendMessage(text='圖片訊息'))
+                    # message.append(TextSendMessage(text='圖片訊息'))
+                    # line_bot_api.reply_message(event.reply_token, message)
+                    image_name = ''.join(
+                        random.choice(string.ascii_letters + string.digits) for x in range(4))  # build random img name
+                    image_content = line_bot_api.get_message_content(event.message.id)
+                    image_name = image_name.upper() + '.jpg'  # build image name ext = jpg
+                    path = './static/' + image_name
+                    with open(path, 'wb') as fd:  # write image into path
+                        for chunk in image_content.iter_content():
+                            fd.write((chunk))
+                    # save image as gray and binary
+                    gray, binary = image_processing_1(image_name, path)
+                    domain = 'cb39-2001-b011-3819-d55a-98da-338d-1db2-20ef.jp.ngrok.io'
+                    gray = 'https://' + domain + gray[1:]
+                    binary = 'https://' + domain + binary[1:]
+                    message.append(ImageSendMessage(original_content_url=gray, preview_image_url=gray))
+                    message.append(ImageSendMessage(original_content_url=binary, preview_image_url=binary))
                     line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'location':

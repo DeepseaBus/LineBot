@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -28,7 +27,6 @@ SECRET_KEY = 'django-insecure-op$xa-4((fa7n%g9j(q9w+$36p@8(rjy8yi-@(y2s*f_pdi71k
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -57,7 +55,7 @@ ROOT_URLCONF = 'LineBot.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],# add templates path
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # add templates path
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,13 +70,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'LineBot.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',#PostgreSQL
+        'ENGINE': 'django.db.backends.postgresql',  # PostgreSQL
         'NAME': 'Crawler',  # database name
         'USER': 'postgres',  # database user
         'PASSWORD': 'DeepseaBus@1992',  # password
@@ -86,7 +83,6 @@ DATABASES = {
         'PORT': '5432'  # port
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -106,7 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -120,13 +115,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICILES_DIRS = [
-    os.path.join(BASE_DIR,'static')# add static path
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/')  # add static path
 ]
 
 # Default primary key field type

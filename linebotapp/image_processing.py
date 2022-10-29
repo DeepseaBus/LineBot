@@ -18,4 +18,17 @@ def image_processing_1(image_name, image_path):
     cv.imwrite(gray_path, gray)
     cv.imwrite(binary_path, binary)
 
-    return gray_path, binary_path
+    # return gray_path, binary_path
+    # put binary image in contours
+    contours, hierarchy = cv.findContours(binary, cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE)
+
+    # copy origin img
+    copy = img.copy()
+
+    # sketch contour on img
+    copy = cv.drawContours(copy, contours, -1, (255, 0, 0), 2)
+
+    # save after contoured img
+    contour_image_path = './static/contour.png'
+    cv.imwrite(contour_image_path, copy)
+    return contour_image_path

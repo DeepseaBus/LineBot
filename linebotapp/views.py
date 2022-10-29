@@ -109,12 +109,15 @@ def callback(request):
                         for chunk in image_content.iter_content():
                             fd.write((chunk))
                     # save image as gray and binary
-                    gray, binary = image_processing_1(image_name, path)
                     domain = 'cb39-2001-b011-3819-d55a-98da-338d-1db2-20ef.jp.ngrok.io'
-                    gray = 'https://' + domain + gray[1:]
-                    binary = 'https://' + domain + binary[1:]
-                    message.append(ImageSendMessage(original_content_url=gray, preview_image_url=gray))
-                    message.append(ImageSendMessage(original_content_url=binary, preview_image_url=binary))
+                    # gray, binary = image_processing_1(image_name, path)
+                    # gray = 'https://' + domain + gray[1:]
+                    # binary = 'https://' + domain + binary[1:]
+                    # message.append(ImageSendMessage(original_content_url=gray, preview_image_url=gray))
+                    # message.append(ImageSendMessage(original_content_url=binary, preview_image_url=binary))
+                    contour = image_processing_1(image_name, path)
+                    contour = 'https://' + domain + contour[1:]
+                    message.append(ImageSendMessage(original_content_url=contour, preview_image_url=contour))
                     line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'location':

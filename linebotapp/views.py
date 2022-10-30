@@ -12,6 +12,7 @@ from linebot.models import *
 from linebotapp.models import *
 from linebotapp.Flex_Msg import *
 from linebotapp.image_processing import *
+from linebotapp.superpix import *
 
 import os
 import string
@@ -114,9 +115,21 @@ def callback(request):
                     gray = 'https://' + domain + gray[1:]
                     binary = 'https://' + domain + binary[1:]
                     contour = 'https://' + domain + contour[1:]
-                    message.append(ImageSendMessage(original_content_url=gray, preview_image_url=gray))
-                    message.append(ImageSendMessage(original_content_url=binary, preview_image_url=binary))
-                    message.append(ImageSendMessage(original_content_url=contour, preview_image_url=contour))
+                    # message.append(ImageSendMessage(original_content_url=gray, preview_image_url=gray))
+                    # message.append(ImageSendMessage(original_content_url=binary, preview_image_url=binary))
+                    # message.append(ImageSendMessage(original_content_url=contour, preview_image_url=contour))
+
+                    # superpix
+                    slic = SLIC(image_name, path)
+                    seeds = SEEDS(image_name, path)
+                    lsc = LSC(image_name, path)
+                    # slic = 'https://' + domain + slic[1:]
+                    # seed = 'https://' + domain + seed[1:]
+                    # lsc = 'https://' + domain + lsc[1:]
+                    message.append(ImageSendMessage(original_content_url=slic, preview_image_url=slic))
+                    message.append(ImageSendMessage(original_content_url=seeds, preview_image_url=seeds))
+                    message.append(ImageSendMessage(original_content_url=lsc, preview_image_url=lsc))
+
                     line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'location':

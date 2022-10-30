@@ -50,10 +50,70 @@ def image_processing_1(image_name, image_path):
                 mask = np.zeros(gray.shape, dtype=np.uint8)
                 cv.drawContours(mask, contours[i], -1, (255, 255, 255), -1)
                 meanVal = cv.mean(img, mask=mask)  # mask is an area, so it has to be single channel
-                if meanVal[2]>meanVal[1] and meanVal[2]>meanVal[1]:
+                if meanVal[2] > meanVal[1] and meanVal[2] > meanVal[1]:
                     print(meanVal)  # print contour's B、G、R average
                     if abs(meanVal[2] - meanVal[1]) > 10:  # if abs(green - red)>10
                         copy = cv.drawContours(img, contours[i], -1, (0, 0, 255), 2)
+
+                        copy = img.copy()
+                        copy = cv.drawContours(copy, contours[i], -1, (0, 0, 255), 2)
+                        # save img
+                        contour_image_path = './static/contour_' + image_name
+                        cv.imwrite(contour_image_path, copy)
+
+                        # bounding rectangle
+                        copy = img.copy()
+                        x, y, w, h = cv.boundingRect(contours[0])
+                        brcnt = np.array([[[x,y]],[[x+w,y]],[[x+w,y+h]],[[x,y+h]]])
+                        cv.drawContours(copy,[brcnt],-1,(255,0,0),2)
+                        a = './static/a_' + image_name
+                        cv.imwrite(a,copy)
+
+                        # min bounding rectangle
+                        copy = img.copy()
+                        rect = cv.minAreaRect(contours[i])
+                        points = cv.boxPoints(rect)
+                        repoint = np.array(points).reshape((-1,1,2)).astype(np.int32)
+                        cv.drawContours(copy,[repoint],0,(255,0,0),2)
+                        b = './static/b_'+image_name
+                        cv.imwrite(b,copy)
+
+                        # min bounding circle
+                        copy = img.copy()
+                        (x, y), radius = cv.minEnclosingCircle(contours[i])
+                        center = (int(x), int(y))
+                        radius = int(radius)
+                        cv.circle(copy, center, radius, (255, 0, 0), 2)
+                        c = './static/c_' + image_name
+                        cv.imwrite(c, copy)
+
+                        # min bounding ellipse
+                        copy = img.copy()
+                        ellipse = cv.fitEllipse(contours[i])
+                        cv.ellipse(copy, ellipse, (255, 0, 0), 3)
+                        d = './static/d_' + image_name
+                        cv.imwrite(d, copy)
+
+                        # min fit line
+                        copy = img.copy()
+                        rows, cols = copy.shape[:2]
+                        [vx, vy, x, y] = cv.fitLine(contours[i], cv.DIST_L2, 0, 0.01, 0.01)
+                        lefty = int(((-x * vy / vx) + y))
+                        righty = int(((cols - x) * vy / vx) + y)
+                        cv.line(copy, (cols - 1, righty), (0, lefty), (255, 0, 0), 2)
+                        e = './static/e_' + image_name
+                        cv.imwrite(e, copy)
+
+                        # min bounding triangle
+                        # error -  Can't parse 'pt1'. Sequence item with index 0 has a wrong type 2022/10/30
+                        # copy = img.copy()
+                        # area, trgl = cv.minEnclosingTriangle(contours[i])
+                        # print(trgl)
+                        # for i in range(0, 3):
+                        #     cv.line(copy, tuple(trgl[i][0]), tuple(trgl[(i + 1) % 3][0]), (255, 0, 0), 2)
+                        # f = './static/f_' + image_name
+                        # cv.imwrite(f, copy)
+
     # copy origin img
     # copy = img.copy()
 
@@ -61,6 +121,6 @@ def image_processing_1(image_name, image_path):
     # copy = cv.drawContours(copy, contours, -1, (255, 0, 0), 2)
     # copy = cv.drawContours(empty, contours, -1, (255, 0, 0), 2)
     # save after contoured img
-    contour_image_path = './static/contour_' + image_name
-    cv.imwrite(contour_image_path, copy)
+    # contour_image_path = './static/contour_' + image_name
+    # cv.imwrite(contour_image_path, copy)
     return gray_path, binary_path, contour_image_path

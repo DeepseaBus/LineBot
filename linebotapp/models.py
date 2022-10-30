@@ -7,6 +7,7 @@ class User_Info(models.Model):
     name = models.CharField(max_length=255, blank=True, null=False)  # LINE名字
     pic_url = models.CharField(max_length=255, null=False)  # 大頭貼網址
     mtext = models.CharField(max_length=255, blank=True, null=False)  # 文字訊息紀錄
+    notify = models.CharField(max_length=255, blank=True, null=False)  # Notify Access Token
     mdt = models.DateTimeField(auto_now=True)  # 物件儲存的日期時間
 
     def __str__(self):

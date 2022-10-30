@@ -5,7 +5,7 @@ from linebotapp.models import *
 
 
 class User_Info_Admin(admin.ModelAdmin):
-    list_display = ('id', 'uid', 'name', 'pic_url', 'mtext', 'mdt')
+    list_display = ('id', 'uid', 'name', 'pic_url', 'mtext', 'notify', 'mdt')
 
 
 class Jobs_Admin(admin.ModelAdmin):

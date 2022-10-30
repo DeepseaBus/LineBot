@@ -1,5 +1,8 @@
 from django.shortcuts import render
 
+# ngrok domain
+domain = 'cb39-2001-b011-3819-d55a-98da-338d-1db2-20ef.jp.ngrok.io'
+
 # Create your views here.
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
@@ -14,8 +17,12 @@ from linebotapp.Flex_Msg import *
 from linebotapp.image_processing import *
 from linebotapp.superpix import *
 
+# audio to string
 import speech_recognition as sr
 from pydub import AudioSegment
+
+# string to audio (MS. Google)
+from gtts import gTTS
 
 import os
 import string
@@ -79,7 +86,15 @@ def callback(request):
                     profile = line_bot_api.get_profile(uid)
                     name = profile.display_name
                     mtext = event.message.text
-                    if 'jobs' in mtext:
+                    if mtext[0] == ' ':  # id first char = ' '
+                        tts = gTTS(text=mtext, lang='zh-tw')
+                        tts.save("./static/mtext.m4a")
+                        # url = 'https://' + domain + '/static/mtext.m4a'
+                        url = domain + '/static/mtext.m4a'
+                        print(url)
+                        message.append(AudioSendMessage(original_content_url=url, duration=330 * len(mtext)))  # 330ms
+                        line_bot_api.reply_message(event.reply_token, message)
+                    elif 'jobs' in mtext:
                         # mtext = event.message.text
                         if 'jobs' in mtext:
                             job = mtext.split(',')
@@ -113,7 +128,6 @@ def callback(request):
                         for chunk in image_content.iter_content():
                             fd.write((chunk))
                     # save image as gray and binary
-                    domain = 'cb39-2001-b011-3819-d55a-98da-338d-1db2-20ef.jp.ngrok.io'
                     gray, binary, contour = image_processing_1(image_name, path)
                     gray = 'https://' + domain + gray[1:]
                     binary = 'https://' + domain + binary[1:]

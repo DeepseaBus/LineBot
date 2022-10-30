@@ -14,6 +14,9 @@ from linebotapp.Flex_Msg import *
 from linebotapp.image_processing import *
 from linebotapp.superpix import *
 
+import speech_recognition as sr
+from pydub import AudioSegment
+
 import os
 import string
 import time
@@ -145,7 +148,31 @@ def callback(request):
                     line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'audio':
+
                     message.append(TextSendMessage(text='聲音訊息'))
+
+                    audio_content = line_bot_api.get_message_content(event.message.id)
+
+                    path = './static/sound.m4a'
+
+                    with open(path, 'wb') as fd:
+
+                        for chunk in audio_content.iter_content():
+                            fd.write(chunk)
+
+                    # audio covert to string
+                    r = sr.Recognizer()
+                    # download https://github.com/BtbN/FFmpeg-Builds/releases => ffmpeg-N-108894-g01b9abd771-win64-gpl-shared.zip
+                    AudioSegment.converter = 'C:\\ffmpeg\\bin\\ffmpeg.exe'  # enter ffmpeg.exe path
+                    sound = AudioSegment.from_file_using_temporary_files(path)
+                    path = os.path.splitext(path)[0] + '.wav'
+                    sound.export(path, format="wav")
+                    with sr.AudioFile(path) as source:
+                        audio = r.record(source)
+                    text = r.recognize_google(audio, language='zh-Hant')  # set language
+
+                    # response converted string
+                    message.append(TextSendMessage(text=text))
                     line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'file':

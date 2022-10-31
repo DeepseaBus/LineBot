@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('callback', views.callback),
     path('notify', views.notify),
+    path('Weather_Predict', views.Weather_Predict),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS)

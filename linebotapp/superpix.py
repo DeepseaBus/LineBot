@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-domain = 'https://cb39-2001-b011-3819-d55a-98da-338d-1db2-20ef.jp.ngrok.io'  # ngrok domain
+domain = 'https://2b79-2001-b011-3819-ddb7-3dd0-5d99-6cbb-8eed.jp.ngrok.io'  # ngrok domain
 
 
 # SLIC

@@ -4,7 +4,7 @@ import requests
 from django.shortcuts import render
 
 # ngrok domain
-domain = 'cb39-2001-b011-3819-d55a-98da-338d-1db2-20ef.jp.ngrok.io'
+domain = '2b79-2001-b011-3819-ddb7-3dd0-5d99-6cbb-8eed.jp.ngrok.io'
 
 # Create your views here.
 from django.conf import settings
@@ -280,4 +280,24 @@ def notify(request):
         User_Info.objects.filter(name=notify_user_info['target']).update(notify=token)
     elif notify_user_info['targetType'] == 'GROUP':
         pass
+    return HttpResponse()
+
+@csrf_exempt
+def Weather_Predict(request):
+    # use utf-8 decode request
+    body = request.body.decode('utf-8')
+    print(body)
+
+    text='雷達回波圖'
+
+    token = 'kQ9M3yeqSaWAUyV3XhABpPVwe3wuc1BKnaHdeUNPKvG'
+
+    headers = {
+        "Authorization": "Bearer " + token,
+        "Content-Type" : "application/x-www-form-urlencoded"
+    }
+    notify_url = "https://notify-api.line.me/api/notify"
+    # payload message => text, imageThumbnail => Thumbnail path, imageFullsize = full img path
+    payload = {'message': text,'imageThumbnail':body,'imageFullsize':body}
+    r = requests.post(notify_url, headers = headers, params = payload)
     return HttpResponse()

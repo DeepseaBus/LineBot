@@ -21,6 +21,7 @@ from linebotapp.Flex_Msg import *
 from linebotapp.image_processing import *
 from linebotapp.superpix import *
 from linebotapp.Grain_Merchant import *
+from linebotapp.Video_Processing import *
 
 # audio to string
 import speech_recognition as sr
@@ -168,7 +169,17 @@ def callback(request):
                     line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'video':
-                    message.append(TextSendMessage(text='影片訊息'))
+                    # message.append(TextSendMessage(text='影片訊息'))
+                    video_content = line_bot_api.get_message_content(event.message.id)
+                    path = './static/video.mp4'
+                    with open(path, 'wb') as fd:
+                        for chunk in video_content.iter_content():
+                            fd.write(chunk)
+                    message.append(TextSendMessage(text='影片存檔成功'))
+                    image_path, video_path = video_processing(path)
+                    message.append(TextSendMessage(text='影片處理完畢'))
+                    message.append(VideoSendMessage(original_content_url=domain + video_path[1:],
+                                                    preview_image_url=domain + image_path[1:]))
                     line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'sticker':
@@ -293,22 +304,23 @@ def notify(request):
         pass
     return HttpResponse()
 
+
 @csrf_exempt
 def Weather_Predict(request):
     # use utf-8 decode request
     body = request.body.decode('utf-8')
     print(body)
 
-    text='雷達回波圖'
+    text = '雷達回波圖'
 
     token = 'kQ9M3yeqSaWAUyV3XhABpPVwe3wuc1BKnaHdeUNPKvG'
 
     headers = {
         "Authorization": "Bearer " + token,
-        "Content-Type" : "application/x-www-form-urlencoded"
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     notify_url = "https://notify-api.line.me/api/notify"
     # payload message => text, imageThumbnail => Thumbnail path, imageFullsize = full img path
-    payload = {'message': text,'imageThumbnail':body,'imageFullsize':body}
-    r = requests.post(notify_url, headers = headers, params = payload)
+    payload = {'message': text, 'imageThumbnail': body, 'imageFullsize': body}
+    r = requests.post(notify_url, headers=headers, params=payload)
     return HttpResponse()

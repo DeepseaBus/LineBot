@@ -4,6 +4,7 @@ import requests
 from django.shortcuts import render
 
 # ngrok domain
+
 domain = '2b79-2001-b011-3819-ddb7-3dd0-5d99-6cbb-8eed.jp.ngrok.io'
 
 # Create your views here.
@@ -19,6 +20,7 @@ from linebotapp.models import *
 from linebotapp.Flex_Msg import *
 from linebotapp.image_processing import *
 from linebotapp.superpix import *
+from linebotapp.Grain_Merchant import *
 
 # audio to string
 import speech_recognition as sr
@@ -44,6 +46,10 @@ def callback(request):
         message = []
         signature = request.META['HTTP_X_LINE_SIGNATURE']
         body = request.body.decode('utf-8')
+
+        # test request
+        print(body)
+
         # put request.body in return message for debug
         # print requestbody
         # message.append(TextSendMessage(text=str(body)))
@@ -153,7 +159,12 @@ def callback(request):
                     line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'location':
+                    # message.append(TextSendMessage(text='位置訊息'))
+                    address = event.message.address
+                    latitude = event.message.latitude
+                    longitude = event.message.longitude
                     message.append(TextSendMessage(text='位置訊息'))
+                    message.append(grain_merchant(address, latitude, longitude))
                     line_bot_api.reply_message(event.reply_token, message)
 
                 elif event.message.type == 'video':

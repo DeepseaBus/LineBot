@@ -15,6 +15,7 @@ def image_processing_1(image_name, image_path):
     # save converted image in path
     gray_path = './static/gray_' + image_name
     binary_path = './static/binary_' + image_name
+    contour_image_path = './static/contour_' + image_name
     cv.imwrite(gray_path, gray)
     cv.imwrite(binary_path, binary)
 

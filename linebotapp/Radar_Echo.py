@@ -8,7 +8,7 @@ def weather_pridict():
 
     image_url = radar_echo['cwbopendata']['dataset']['resource']['uri']
 
-    post_url = 'https://2b79-2001-b011-3819-ddb7-3dd0-5d99-6cbb-8eed.jp.ngrok.io/Weather_Predict'
+    post_url = 'https://b0a5-2001-b011-3819-ddb7-7cfb-8a7e-56c1-192a.jp.ngrok.io/Weather_Predict'
     res_post = requests.post(post_url, image_url)
 
 

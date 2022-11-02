@@ -5,7 +5,7 @@ from django.shortcuts import render
 
 # ngrok domain
 
-domain = '2b79-2001-b011-3819-ddb7-3dd0-5d99-6cbb-8eed.jp.ngrok.io'
+domain = 'b0a5-2001-b011-3819-ddb7-7cfb-8a7e-56c1-192a.jp.ngrok.io'
 
 # Create your views here.
 from django.conf import settings
@@ -30,6 +30,11 @@ from pydub import AudioSegment
 # string to audio (MS. Google)
 from gtts import gTTS
 
+from liffpy import (
+    LineFrontendFramework as LIFF,
+    ErrorResponse
+)
+
 import os
 import string
 import time
@@ -38,6 +43,7 @@ import csv
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
+liff_api = LIFF(settings.LINE_CHANNEL_ACCESS_TOKEN)
 
 
 @csrf_exempt
@@ -122,6 +128,18 @@ def callback(request):
                     elif 'FlexMessage測試' in mtext:
                         message.append(flex_message_example())
                         line_bot_api.reply_message(event.reply_token, message)
+                    elif 'https://' in mtext:
+                        try:
+                            # 新增LIFF頁面到LINEBOT中
+                            liff_id = liff_api.add(
+                                view_type="tall",
+                                view_url=mtext)
+
+                            message.append(TextSendMessage(text='https://liff.line.me/' + liff_id))
+                            line_bot_api.reply_message(event.reply_token, message)
+                        except:
+                            print(err.message)
+
                     else:
                         message.append(TextSendMessage(text='文字訊息'))
                         line_bot_api.reply_message(event.reply_token, message)

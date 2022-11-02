@@ -130,15 +130,17 @@ def callback(request):
                         line_bot_api.reply_message(event.reply_token, message)
                     elif 'https://' in mtext:
                         try:
-                            # 新增LIFF頁面到LINEBOT中
+                            # ceate LIFF in LINEBOT
                             liff_id = liff_api.add(
                                 view_type="tall",
-                                view_url=mtext)
+                                view_url='https://www.google.com/')
 
-                            message.append(TextSendMessage(text='https://liff.line.me/' + liff_id))
+                            print(liff_id)
+                            message.append(TextSendMessage(text='liff.line.me/' + liff_id))
+                            print(message)
                             line_bot_api.reply_message(event.reply_token, message)
-                        except:
-                            print(err.message)
+                        except Exception  as err:
+                            print(err)
 
                     else:
                         message.append(TextSendMessage(text='文字訊息'))
